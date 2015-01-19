@@ -63,6 +63,12 @@ let tags = "dependency-injection C# F# dotnet .net ninject"
 
 let buildMode = "Release" // if isMono then "Release" else "Debug"
 
+let generated_file_list =
+  [ "Yaaf.DependencyInjection.dll"
+    "Yaaf.DependencyInjection.xml"
+    "Yaaf.DependencyInjection.Ninject.dll"
+    "Yaaf.DependencyInjection.Ninject.xml" ]
+
 // Where to look for *.cshtml templates (in this order)
 let layoutRoots =
     [ docTemplatesDir; 
@@ -120,7 +126,10 @@ let runTests (buildParams:BuildParams) =
     System.IO.Directory.CreateDirectory(logs) |> ignore
     let files = 
         !! (testDir + "/Test.*.dll")
-    files
+    if files |> Seq.isEmpty then
+      traceError (sprintf "NO test found in %s" testDir)
+    else
+      files
         |> NUnit (fun p ->
             {p with
                 //NUnitParams.WorkingDir = working

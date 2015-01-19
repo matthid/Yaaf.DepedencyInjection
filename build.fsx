@@ -105,10 +105,7 @@ MyTarget "CopyToRelease" (fun _ ->
         |> Seq.iter (fun (source, target) ->
             let outDir = outLibDir @@ target 
             ensureDirectory outDir
-            [ "Yaaf.DependencyInjection.dll"
-              "Yaaf.DependencyInjection.xml"
-              "Yaaf.DependencyInjection.Ninject.dll"
-              "Yaaf.DependencyInjection.Ninject.xml" ]
+            generated_file_list
             |> Seq.filter (fun (file) -> File.Exists (source @@ file))
             |> Seq.iter (fun (file) ->
                 let newfile = outDir @@ Path.GetFileName file
@@ -148,7 +145,7 @@ MyTarget "NuGet" (fun _ ->
             OutputPath = outDir
             AccessKey = getBuildParamOrDefault "nugetkey" ""
             Publish = hasBuildParam "nugetkey"
-            Dependencies = [ ] })
+            Dependencies = [ "Portable.Ninject", "3.3.1" ] })
         "nuget/Yaaf.DependencyInjection.Ninject.nuspec"
 )
 

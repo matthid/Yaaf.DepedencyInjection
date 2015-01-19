@@ -1,4 +1,4 @@
-﻿# IRC.Net implementation documentation 
+﻿# Yaaf.DependencyInjection implementation documentation 
 
 ## Building
 
@@ -12,9 +12,9 @@ This project aims to be a very flexible, extendable and good performing IRC impl
 
 ### Issues / Features / TODOs
 
-New features are accepted via github pull requests (so just fork away right now!):  https://github.com/alexreg/ircdotnet.
+New features are accepted via github pull requests (so just fork away right now!):  https://github.com/matthid/Yaaf.DependencyInjection.
 
-Issues and TODOs are tracked on github, see: https://github.com/alexreg/ircdotnet/issues.
+Issues and TODOs are tracked on github, see: https://github.com/matthid/Yaaf.DependencyInjection/issues.
 
 Discussions/Forums are on IRC. 
 
@@ -91,12 +91,9 @@ First `build.sh` and `build.cmd` restore build dependencies and `nuget.exe`, the
  - `Clean`: cleans the directories (previous builds)
  - `RestorePackages`: restores nuget packages
  - `SetVersions`: sets the current version
- - `BuildApp_40`: build for net40
- - `BuildTest_40`: build the tests for net40
- - `Test_40`: run the tests for net40
- - `BuildApp_45`: build for net45
- - `BuildTest_45`: build the tests for net45
- - `Test_45`: run the tests for net45
+ - `Build_net40`: build/test for net40
+ - `Build_net45`: build/test for net45
+ - `Build_profile111`: build/test the tests for profile111 (portable-net45+netcore45+wpa81+MonoAndroid1+MonoTouch1)
  - `CopyToRelease`: copy the generated .dlls to release/lib
  - `LocalDoc`: create the local documentation you can view that locally
  - `All`: this does nothing itself but is used as a marker (executed by default when no parameter is given to ./build)
@@ -106,7 +103,7 @@ First `build.sh` and `build.cmd` restore build dependencies and `nuget.exe`, the
  - `ReleaseGithubDoc`: pushes the documentation to github
  - `Release`: a marker like "All"
 
-You can execute all steps until a given point with `./build #Step#` (replace #Step# with `Test_40` to execute `Clean`, `RestorePackages`, `SetVersions`, ..., `Test_40`)
+You can execute all steps until a given point with `./build #Step#` (replace #Step# with `Build_net40` to execute `Clean`, `RestorePackages`, `SetVersions`, `Build_net40`)
 
 You can execute a single step with `build #Step#_single`: For example to build the nuget packages you can just invoke `./build NuGet_single` 
 
@@ -119,17 +116,9 @@ this step is only needed when build dependencies change. `git clean -d -x -f` is
 ## Visual Studio / Monodevelop
 
 As mentioned above you need to `build` at least once before you can open the 
-solution file (`src/IrcDotNet.sln`) with Visual Studio / Monodevelop.
+solution files (`src/${ProjectName}.*.sln`) with Visual Studio / Monodevelop.
 
-The default is that Visual Studio is configured for the latest build (`net45`).
-If you want to build another target with Visual Studio / Monodevelop do the following:
+Just open the solution file for the build you want to edit. 
 
- - Close the solution
- - Open `src/buildConfig.targets` and change the `CustomBuildName` entry (near the top) to `sl40`, `net45` or `net40`.
-   The line should then look like this:
-   
-   ```markup
-   <CustomBuildName Condition=" '$(CustomBuildName)' == '' ">net40</CustomBuildName> 
-   ```
-
- - Save the `src/buildConfig.targets` file and re-open the solution.
+ - Note that files/references are managed through special `includes.targets` (eg: `src/source/${ProjectName}/includes.targets`) files.
+ - The build configuration is managed through `src/buildConfig.targets`

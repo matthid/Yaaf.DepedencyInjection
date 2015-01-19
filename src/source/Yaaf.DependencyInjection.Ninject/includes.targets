@@ -4,6 +4,7 @@
     <RootNamespace>Yaaf.DependencyInjection.Ninject</RootNamespace>
     <AssemblyName>Yaaf.DependencyInjection.Ninject</AssemblyName>
   </PropertyGroup>
+  <Import Project="$(SolutionDir)\buildConfig.targets" />
   <ItemGroup>
     <CompileImports Include="ChildKernel\ChildActicationCache.cs" />
     <CompileImports Include="ChildKernel\ChildKernel.cs" />
@@ -12,6 +13,9 @@
     <CompileImports Include="NinjectKernel.cs" />
     <CompileImports Include="NinjectBinder.cs" />
     <CompileImports Include="Properties\AssemblyInfo.cs" />
+    <CompileImports Include="..\..\SharedAssemblyInfo.Ninject.cs">
+      <Link>Properties\SharedAssemblyInfo.Ninject.cs</Link>
+    </CompileImports>
   </ItemGroup>
   <ItemGroup>
     <NoneImports Include="app.config" />

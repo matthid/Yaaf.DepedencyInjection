@@ -170,9 +170,7 @@ let buildAllDocumentation outDocDir website_root =
 
     // Build API reference from XML comments
     let referenceBinaries =
-        [
-            "IrcDotNet.dll"
-        ]
+        generated_file_list |> List.filter (fun f -> f.EndsWith(".dll") || f.EndsWith(".exe"))
 
     let buildReference () =
         let referenceDir = outDocDir @@ "html"

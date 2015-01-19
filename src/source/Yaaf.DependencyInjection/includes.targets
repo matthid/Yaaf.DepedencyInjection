@@ -4,9 +4,13 @@
     <RootNamespace>Yaaf.DependencyInjection</RootNamespace>
     <AssemblyName>Yaaf.DependencyInjection</AssemblyName>
   </PropertyGroup>
+  <Import Project="$(SolutionDir)\buildConfig.targets" />
   <ItemGroup>
     <CompileImports Include="DependcyInjectionInterfaces.cs" />
     <CompileImports Include="Properties\AssemblyInfo.cs" />
+    <CompileImports Include="..\..\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </CompileImports>
   </ItemGroup>
   <ItemGroup>
     <NoneImports Include="packages.config">
