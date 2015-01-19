@@ -7,12 +7,12 @@
 **Development Branch**
 
 [![Build Status](https://travis-ci.org/matthid/Yaaf.DependencyInjection.svg?branch=develop)](https://travis-ci.org/matthid/Yaaf.DependencyInjection)
-[![Build status](https://ci.appveyor.com/api/projects/status/1kgumufg5xre9doo/branch/develop?svg=true)](https://ci.appveyor.com/project/matthid/Yaaf.DependencyInjection/branch/develop)
+[![Build status](https://ci.appveyor.com/api/projects/status/7swsek98sfb3msi7/branch/develop?svg=true)](https://ci.appveyor.com/project/matthid/Yaaf.DependencyInjection/branch/develop)
 
 **Master Branch**
 
 [![Build Status](https://travis-ci.org/matthid/Yaaf.DependencyInjection.svg?branch=master)](https://travis-ci.org/matthid/Yaaf.DependencyInjection)
-[![Build status](https://ci.appveyor.com/api/projects/status/1kgumufg5xre9doo/branch/master?svg=true)](https://ci.appveyor.com/project/matthid/Yaaf.DependencyInjection/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/7swsek98sfb3msi7/branch/master?svg=true)](https://ci.appveyor.com/project/matthid/Yaaf.DependencyInjection/branch/master)
 
 ## Overview
 
