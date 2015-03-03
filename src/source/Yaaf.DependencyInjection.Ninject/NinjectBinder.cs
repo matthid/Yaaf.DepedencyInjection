@@ -13,7 +13,7 @@ using n = Ninject;
 namespace Yaaf.DependencyInjection.Ninject {
 	using global::Ninject;
 
-	class NinjectBinder<TService> : my.IBinder<TService> {
+	class NinjectBinder<TService> : my.IBinder<TService> where TService : class {
 		private n.Syntax.IBindingToSyntax<TService> binder;
 
 		public NinjectBinder (n.Syntax.IBindingToSyntax<TService> binder)
@@ -21,7 +21,7 @@ namespace Yaaf.DependencyInjection.Ninject {
 			this.binder = binder;
 		}
 
-		public void To<TInstance> () where TInstance : TService
+		public void To<TInstance> () where TInstance : class, TService
 		{
 			try {
 				binder.To<TInstance> ();

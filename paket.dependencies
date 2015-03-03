@@ -9,3 +9,4 @@ nuget FSharp.Formatting == 2.6.3
 // Projects
 nuget FSharp.Core
 nuget Portable.Ninject
+nuget SimpleInjector

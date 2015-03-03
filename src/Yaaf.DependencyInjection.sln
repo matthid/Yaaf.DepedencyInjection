@@ -6,14 +6,8 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "project_root", "project_root", "{4C04B011-7998-4549-A3B5-E57AAF5A2966}"
 	ProjectSection(SolutionItems) = preProject
 		..\.gitignore = ..\.gitignore
-		..\.travis.yml = ..\.travis.yml
-		..\appveyor.yml = ..\appveyor.yml
-		..\build.cmd = ..\build.cmd
-		..\build.fsx = ..\build.fsx
-		..\build.sh = ..\build.sh
 		..\buildConfig.fsx = ..\buildConfig.fsx
-		..\downloadNuget.fsx = ..\downloadNuget.fsx
-		..\generateDocs.fsx = ..\generateDocs.fsx
+		..\paket.dependencies = ..\paket.dependencies
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
@@ -61,8 +55,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "img", "img", "{74E37E7B-B46
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{9A47C8E6-9866-4184-B68F-112E3D3AC1D6}"
 	ProjectSection(SolutionItems) = preProject
-		..\nuget\IrcDotNet.nuspec = ..\nuget\IrcDotNet.nuspec
-		..\nuget\IrcDotNet.Sample.nuspec = ..\nuget\IrcDotNet.Sample.nuspec
+		..\nuget\Yaaf.DependencyInjection.Ninject.nuspec = ..\nuget\Yaaf.DependencyInjection.Ninject.nuspec
+		..\nuget\Yaaf.DependencyInjection.nuspec = ..\nuget\Yaaf.DependencyInjection.nuspec
+		..\nuget\Yaaf.DependencyInjection.SimpleInjector.nuspec = ..\nuget\Yaaf.DependencyInjection.SimpleInjector.nuspec
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{5911949D-C24B-4366-BF88-EC59180A7BFC}"
@@ -70,6 +65,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yaaf.DependencyInjection", "source\Yaaf.DependencyInjection\Yaaf.DependencyInjection.csproj", "{337804C8-9420-4E2D-A918-A62AC2F84555}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yaaf.DependencyInjection.Ninject", "source\Yaaf.DependencyInjection.Ninject\Yaaf.DependencyInjection.Ninject.csproj", "{07D79E26-C068-4E44-9712-4707E2F88E2A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yaaf.DependencyInjection.SimpleInjector", "source\Yaaf.DependencyInjection.SimpleInjector\Yaaf.DependencyInjection.SimpleInjector.csproj", "{A83A0AD6-539A-475A-8173-53B127A97296}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -105,6 +102,18 @@ Global
 		{07D79E26-C068-4E44-9712-4707E2F88E2A}.Release|Net45.Build.0 = Release|Net45
 		{07D79E26-C068-4E44-9712-4707E2F88E2A}.Release|Profile111.ActiveCfg = Release|Profile111
 		{07D79E26-C068-4E44-9712-4707E2F88E2A}.Release|Profile111.Build.0 = Release|Profile111
+		{A83A0AD6-539A-475A-8173-53B127A97296}.Debug|Net40.ActiveCfg = Debug|Net40
+		{A83A0AD6-539A-475A-8173-53B127A97296}.Debug|Net40.Build.0 = Debug|Net40
+		{A83A0AD6-539A-475A-8173-53B127A97296}.Debug|Net45.ActiveCfg = Debug|Net45
+		{A83A0AD6-539A-475A-8173-53B127A97296}.Debug|Net45.Build.0 = Debug|Net45
+		{A83A0AD6-539A-475A-8173-53B127A97296}.Debug|Profile111.ActiveCfg = Debug|Profile111
+		{A83A0AD6-539A-475A-8173-53B127A97296}.Debug|Profile111.Build.0 = Debug|Profile111
+		{A83A0AD6-539A-475A-8173-53B127A97296}.Release|Net40.ActiveCfg = Release|Net40
+		{A83A0AD6-539A-475A-8173-53B127A97296}.Release|Net40.Build.0 = Release|Net40
+		{A83A0AD6-539A-475A-8173-53B127A97296}.Release|Net45.ActiveCfg = Release|Net45
+		{A83A0AD6-539A-475A-8173-53B127A97296}.Release|Net45.Build.0 = Release|Net45
+		{A83A0AD6-539A-475A-8173-53B127A97296}.Release|Profile111.ActiveCfg = Release|Profile111
+		{A83A0AD6-539A-475A-8173-53B127A97296}.Release|Profile111.Build.0 = Release|Profile111
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
