@@ -35,7 +35,7 @@ let buildConfig =
  let release = ReleaseNotesHelper.parseReleaseNotes (File.ReadLines "doc/ReleaseNotes.md")
  let version_ninject = "1.1.0"
  let project_ninject = "Yaaf.DependencyInjection.Ninject"
- let version_simpleinjector = "1.1.2"
+ let version_simpleinjector = "1.1.3"
  let project_simpleinjector = "Yaaf.DependencyInjection.SimpleInjector"
  { BuildConfiguration.Defaults with
     ProjectName = "Yaaf.DependencyInjection"

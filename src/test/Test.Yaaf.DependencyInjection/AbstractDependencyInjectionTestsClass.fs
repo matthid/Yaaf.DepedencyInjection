@@ -37,3 +37,12 @@ type AbstractDependencyInjectionTestsClass() =
         let childService = child.Get<IKernel>()
         test <@ obj.ReferenceEquals(childService, child) @>
         ()
+        
+    [<Test>]
+    member x.``check that child holds singleton`` () =
+        let kernel = x.CreateKernel()
+        kernel.Bind<ITest>().ToConstant(Tester("MyData"))
+        
+        let child = kernel.CreateChild();
+        test <@ child.Get<ITest>().Test() = "MyData" @>
+        ()
