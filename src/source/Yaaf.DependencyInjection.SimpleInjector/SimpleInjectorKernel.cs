@@ -35,8 +35,7 @@ namespace Yaaf.DependencyInjection
             clone.Options.AllowOverridingRegistrations = true;
             foreach (var reg in container.GetCurrentRegistrations())
             {
-                clone.Register(reg.ServiceType, reg.Registration.ImplementationType, reg.Lifestyle);
-                //clone.AddRegistration(reg.ServiceType, reg.Registration.);
+                clone.Register(reg.ServiceType, () => container.GetInstance(reg.ServiceType), reg.Lifestyle);                //clone.AddRegistration(reg.ServiceType, reg.Registration.);
             }
             clone.Options.AllowOverridingRegistrations = false;
             return clone;
