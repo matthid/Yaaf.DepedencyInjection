@@ -10,3 +10,9 @@ nuget FSharp.Formatting == 2.6.3
 nuget FSharp.Core
 nuget Portable.Ninject
 nuget SimpleInjector
+
+// Tests
+nuget NUnit == 2.6.3
+nuget Foq
+nuget FsUnit
+nuget Unquote
