@@ -3,12 +3,12 @@ using System.Reflection;
 
 [assembly: AssemblyCompanyAttribute("Yaaf.DependencyInjection")]
 [assembly: AssemblyProductAttribute("Yaaf.DependencyInjection")]
-[assembly: AssemblyCopyrightAttribute("Yaaf.DependencyInjection Copyright © Matthias Dittrich 2011-2015")]
-[assembly: AssemblyVersionAttribute("1.0.0.0")]
-[assembly: AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: AssemblyCopyrightAttribute("Yaaf.DependencyInjection Copyright © Matthias Dittrich 2015")]
+[assembly: AssemblyVersionAttribute("1.1.0")]
+[assembly: AssemblyFileVersionAttribute("1.1.0")]
+[assembly: AssemblyInformationalVersionAttribute("1.1.0")]
 namespace System {
     internal static class AssemblyVersionInformation {
-        internal const string Version = "1.0.0.0";
+        internal const string Version = "1.1.0";
     }
 }

@@ -4,19 +4,21 @@
 // ----------------------------------------------------------------------------
 
 (*
-    This file handles the complete build process of RazorEngine
+    This file handles the configuration of the Yaaf.AdvancedBuilding build script.
 
-    The first step is handled in build.sh and build.cmd by bootstrapping a NuGet.exe and 
-    executing NuGet to resolve all build dependencies (dependencies required for the build to work, for example FAKE)
+    The first step is handled in build.sh and build.cmd by restoring either paket dependencies or bootstrapping a NuGet.exe and 
+    executing NuGet to resolve all build dependencies (dependencies required for the build to work, for example FAKE).
 
-    The secound step is executing this file which resolves all dependencies, builds the solution and executes all unit tests
+    The secound step is executing build.fsx which loads this file (for configuration), builds the solution and executes all unit tests.
 *)
 
+#if FAKE
+#else
+// Support when file is opened in Visual Studio
+#load "packages/Yaaf.AdvancedBuilding/content/buildConfigDef.fsx"
+#endif
 
-// Supended until FAKE supports custom mono parameters
-#I @".nuget/Build/FAKE/tools/" // FAKE
-#r @"FakeLib.dll"  //FAKE
-
+open BuildConfigDef
 open System.Collections.Generic
 open System.IO
 
@@ -25,143 +27,108 @@ open Fake.Git
 open Fake.FSharpFormatting
 open AssemblyInfoFile
 
-// properties (main)
-let projectName = "Yaaf.DependencyInjection"
-let copyrightNotice = "Yaaf.DependencyInjection Copyright © Matthias Dittrich 2011-2015"
-let projectSummary = "Yaaf.DependencyInjection is a simple abstraction layer over a (simple) dependency injection library."
-let projectDescription = "Yaaf.DependencyInjection is a simple abstraction layer over a (simple) dependency injection library."
-let authors = ["Matthias Dittrich"]
-let page_author = "Matthias Dittrich"
-let mail = "matthi.d@gmail.com"
-let version = "1.0.0.0"
-let version_nuget = "1.0.0"
-let commitHash = Information.getCurrentSHA1(".")
-
-// properties ninject
-let projectName_ninject = "Yaaf.DependencyInjection.Ninject"
-let projectSummary_ninject = "Yaaf.DependencyInjection.Ninject is a implementation of Yaaf.DependencyInjection for Ninject."
-let projectDescription_ninject = "Yaaf.DependencyInjection.Ninject is a implementation of Yaaf.DependencyInjection for Ninject."
-let version_ninject = "1.0.0.0"
-let version_nuget_ninject = "1.0.0"
-
-//let buildTargets = environVarOrDefault "BUILDTARGETS" ""
-//let buildPlatform = environVarOrDefault "BUILDPLATFORM" "MONO"
-let buildDir = "./build/"
-let releaseDir = "./release/"
-let outLibDir = "./release/lib/"
-let outDocDir = "./release/documentation/"
-let docTemplatesDir = "./doc/templates/"
-let testDir  = "./test/"
-let nugetDir  = "./.nuget/"
-let packageDir  = "./.nuget/packages"
-
-let github_user = "matthid"
-let github_project = "Yaaf.DependencyInjection"
-let nuget_url = "https://www.nuget.org/packages/Yaaf.DependencyInjection/"
-
-let tags = "dependency-injection C# F# dotnet .net ninject"
-
-let buildMode = "Release" // if isMono then "Release" else "Debug"
-
-let generated_file_list =
-  [ "Yaaf.DependencyInjection.dll"
-    "Yaaf.DependencyInjection.xml"
-    "Yaaf.DependencyInjection.Ninject.dll"
-    "Yaaf.DependencyInjection.Ninject.xml" ]
-
-// Where to look for *.cshtml templates (in this order)
-let layoutRoots =
-    [ docTemplatesDir; 
-      docTemplatesDir @@ "reference" ]
-
 if isMono then
     monoArguments <- "--runtime=v4.0 --debug"
-    //monoArguments <- "--runtime=v4.0"
 
-let github_url = sprintf "https://github.com/%s/%s" github_user github_project
-    
-// Ensure the ./src/.nuget/NuGet.exe file exists (required by xbuild)
-let nuget = findToolInSubPath "NuGet.exe" "./.nuget/Build/NuGet.CommandLine/tools/NuGet.exe"
-System.IO.File.Copy(nuget, "./src/.nuget/NuGet.exe", true)
+let buildConfig =
+ // Read release notes document
+ let release = ReleaseNotesHelper.parseReleaseNotes (File.ReadLines "doc/ReleaseNotes.md")
+ let version_ninject = "1.1.0"
+ let project_ninject = "Yaaf.DependencyInjection.Ninject"
+ let version_simpleinjector = "1.1.0"
+ let project_simpleinjector = "Yaaf.DependencyInjection.SimpleInjector"
+ { BuildConfiguration.Defaults with
+    ProjectName = "Yaaf.DependencyInjection"
+    CopyrightNotice = "Yaaf.DependencyInjection Copyright © Matthias Dittrich 2015"
+    ProjectSummary = "Yaaf.DependencyInjection is a simple abstraction layer over a (simple) dependency injection library."
+    ProjectDescription = "Yaaf.DependencyInjection is a simple abstraction layer over a (simple) dependency injection library."
+    ProjectAuthors = ["Matthias Dittrich"]
+    NugetTags =  "dependency-injection C# F# dotnet .net ninject"
+    PageAuthor = "Matthias Dittrich"
+    GithubUser = "matthid"
+    Version = release.NugetVersion
+    NugetPackages =
+      [ "Yaaf.DependencyInjection.nuspec", (fun config p ->
+          { p with
+              Version = config.Version
+              ReleaseNotes = toLines release.Notes
+              Dependencies = 
+                [ "FSharp.Core", "3.1.2.1" ] })
+        "Yaaf.DependencyInjection.Ninject.nuspec", (fun config p ->
+          { p with
+              Version = version_ninject
+              ReleaseNotes = toLines release.Notes
+              Project = project_ninject
+              Summary = "Yaaf.DependencyInjection.Ninject is a implementation of Yaaf.DependencyInjection for Ninject."
+              Description = "Yaaf.DependencyInjection.Ninject is a implementation of Yaaf.DependencyInjection for Ninject."
+              Dependencies = 
+                [ "FSharp.Core", "3.1.2.1"
+                  "Portable.Ninject", "3.3.1"
+                  config.ProjectName, config.Version ] })
 
-// Read release notes document
-let release = ReleaseNotesHelper.parseReleaseNotes (File.ReadLines "doc/ReleaseNotes.md")
-
-let MyTarget name body =
-    Target name body
-    Target (sprintf "%s_single" name) body 
-
-
-type BuildParams =
-    {
-        SimpleBuildName : string
-        CustomBuildName : string
-    }
-
-let buildApp (buildParams:BuildParams) =
-    let buildDir = buildDir @@ buildParams.CustomBuildName
-    CleanDirs [ buildDir ]
-    // build app
-    let files = !! (sprintf "src/source/**/*.%s.csproj" buildParams.CustomBuildName)
-    files
-        |> MSBuild buildDir "Build" 
-            [   "Configuration", buildMode
-                "CustomBuildName", buildParams.CustomBuildName ]
-        |> Log "AppBuild-Output: "
-
-let buildTests (buildParams:BuildParams) =
-    let testDir = testDir @@ buildParams.CustomBuildName
-    CleanDirs [ testDir ]
-    // build tests
-    let files = !! (sprintf "src/test/**/Test.*.%s.csproj" buildParams.CustomBuildName)
-    files
-        |> MSBuild testDir "Build" 
-            [   "Configuration", buildMode
-                "CustomBuildName", buildParams.CustomBuildName ]
-        |> Log "TestBuild-Output: "
-    
-let runTests (buildParams:BuildParams) =
-    let testDir = testDir @@ buildParams.CustomBuildName
-    let logs = System.IO.Path.Combine(testDir, "logs")
-    System.IO.Directory.CreateDirectory(logs) |> ignore
-    let files = 
-        !! (testDir + "/Test.*.dll")
-    if files |> Seq.isEmpty then
-      traceError (sprintf "NO test found in %s" testDir)
-    else
-      files
-        |> NUnit (fun p ->
-            {p with
-                //NUnitParams.WorkingDir = working
-                //ExcludeCategory = if isMono then "VBNET" else ""
-                ProcessModel = 
-                    // Because the default nunit-console.exe.config doesn't use .net 4...
-                    if isMono then NUnitProcessModel.SingleProcessModel else NUnitProcessModel.DefaultProcessModel
-                WorkingDir = testDir
-                StopOnError = true
-                TimeOut = System.TimeSpan.FromMinutes 30.0
-                Framework = "4.0"
-                DisableShadowCopy = true;
-                OutputFile = "logs/TestResults.xml" })
-
-let buildAll (buildParams:BuildParams) =
-    buildApp buildParams
-    buildTests buildParams
-    runTests buildParams
-
-
-let net40Params = { SimpleBuildName = "net40"; CustomBuildName = "net40" }
-let net45Params = { SimpleBuildName = "net45"; CustomBuildName = "net45" }
-let profile111Params = { SimpleBuildName = "profile111"; CustomBuildName = "portable-net45+netcore45+wpa81+MonoAndroid1+MonoTouch1" }
-
-let allParams = [ net40Params; net45Params; profile111Params ]
-
-// Documentation 
-let buildDocumentationTarget target =
-    trace (sprintf "Building documentation (%s), this could take some time, please wait..." target)
-    let b, s = executeFSI "." "generateDocs.fsx" ["target", target]
-    for l in s do
-        (if l.IsError then traceError else trace) (sprintf "DOCS: %s" l.Message)
-    if not b then
-        failwith "documentation failed"
-    ()
+        "Yaaf.DependencyInjection.SimpleInjector.nuspec", (fun config p ->
+          { p with
+              Version = version_simpleinjector
+              ReleaseNotes = toLines release.Notes
+              Project = project_simpleinjector
+              Summary = "Yaaf.DependencyInjection.SimpleInjector is a implementation of Yaaf.DependencyInjection for SimpleInjector."
+              Description = "Yaaf.DependencyInjection.SimpleInjector is a implementation of Yaaf.DependencyInjection for SimpleInjector."
+              Dependencies =
+                [ "FSharp.Core", "3.1.2.1"
+                  "SimpleInjector", "2.7.2"
+                  config.ProjectName, config.Version ] })
+                   ]
+    UseNuget = false
+    SetAssemblyFileVersions = (fun config ->
+      let info =
+        [ Attribute.Company config.ProjectName
+          Attribute.Product config.ProjectName
+          Attribute.Copyright config.CopyrightNotice
+          Attribute.Version config.Version
+          Attribute.FileVersion config.Version
+          Attribute.InformationalVersion config.Version ]
+      CreateCSharpAssemblyInfo "./src/SharedAssemblyInfo.cs" info
+      let info =
+        [ Attribute.Company project_ninject
+          Attribute.Product project_ninject
+          Attribute.Copyright config.CopyrightNotice
+          Attribute.Version version_ninject
+          Attribute.FileVersion version_ninject
+          Attribute.InformationalVersion version_ninject ]
+      CreateCSharpAssemblyInfo "./src/SharedAssemblyInfo.Ninject.cs" info
+      let info =
+        [ Attribute.Company project_simpleinjector
+          Attribute.Product project_simpleinjector
+          Attribute.Copyright config.CopyrightNotice
+          Attribute.Version version_simpleinjector
+          Attribute.FileVersion version_simpleinjector
+          Attribute.InformationalVersion version_simpleinjector ]
+      CreateCSharpAssemblyInfo "./src/SharedAssemblyInfo.SimpleInjector.cs" info )
+    EnableProjectFileCreation = false
+    GeneratedFileList =
+      [ "Yaaf.DependencyInjection.dll"
+        "Yaaf.DependencyInjection.xml"
+        "Yaaf.DependencyInjection.Ninject.dll"
+        "Yaaf.DependencyInjection.Ninject.xml"
+        "Yaaf.DependencyInjection.SimpleInjector.dll"
+        "Yaaf.DependencyInjection.SimpleInjector.xml"  ]
+    BuildTargets =
+     [ { BuildParams.WithSolution with
+          // The default build
+          PlatformName = "Net40"
+          // Workaround FSharp.Compiler.Service not liking to have a FSharp.Core here: https://github.com/fsprojects/FSharpx.Reflection/issues/1
+          AfterBuild = fun _ -> File.Delete "build/net40/FSharp.Core.dll"
+          SimpleBuildName = "net40" }
+       { BuildParams.WithSolution with
+          // The default build
+          PlatformName = "Profile111"
+          // Workaround FSharp.Compiler.Service not liking to have a FSharp.Core here: https://github.com/fsprojects/FSharpx.Reflection/issues/1
+          AfterBuild = fun _ -> File.Delete "build/profile111/FSharp.Core.dll"
+          SimpleBuildName = "profile111" }
+       { BuildParams.WithSolution with
+          // The default build
+          PlatformName = "Net45"
+          // Workaround FSharp.Compiler.Service not liking to have a FSharp.Core here: https://github.com/fsprojects/FSharpx.Reflection/issues/1
+          AfterBuild = fun _ -> File.Delete "build/net45/FSharp.Core.dll"
+          SimpleBuildName = "net45" } ]
+  }

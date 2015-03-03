@@ -75,7 +75,7 @@ namespace Yaaf.DependencyInjection.Ninject {
 			}
 		}
 
-		public my.IBinder<TService> Bind<TService> ()
+		public my.IBinder<TService> Bind<TService> () where TService : class
 		{
 			CheckBind (typeof(TService));
 			try {
@@ -97,7 +97,7 @@ namespace Yaaf.DependencyInjection.Ninject {
 		}
 
 
-		public void Unbind<TService> ()
+        public void Unbind<TService>() where TService : class
 		{
 			CheckBind (typeof (TService));
 			try {
@@ -117,7 +117,7 @@ namespace Yaaf.DependencyInjection.Ninject {
 			}
 		}
 
-		public IBinder<TService> Rebind<TService> ()
+        public IBinder<TService> Rebind<TService>() where TService : class
 		{
 			CheckBind (typeof (TService));
 			try {
@@ -136,7 +136,7 @@ namespace Yaaf.DependencyInjection.Ninject {
 				throw WrapExn (err);
 			}
 		}
-		public TService Get<TService> ()
+        public TService Get<TService>() where TService : class
 		{
 			try {
 				return kernel.Get<TService> ();
@@ -164,7 +164,7 @@ namespace Yaaf.DependencyInjection.Ninject {
 			}
 		}
 
-		public Microsoft.FSharp.Core.FSharpOption<TService> TryGet<TService> ()
+        public Microsoft.FSharp.Core.FSharpOption<TService> TryGet<TService>() where TService : class
 		{
 			try {
 				var result = kernel.TryGet<TService> ();

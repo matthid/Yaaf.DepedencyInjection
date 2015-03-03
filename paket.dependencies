@@ -1,0 +1,12 @@
+source https://nuget.org/api/v2
+
+// Build
+nuget Yaaf.AdvancedBuilding
+nuget NUnit.Runners
+// Until it works on windows.
+nuget FSharp.Formatting == 2.6.3
+
+// Projects
+nuget FSharp.Core
+nuget Portable.Ninject
+nuget SimpleInjector

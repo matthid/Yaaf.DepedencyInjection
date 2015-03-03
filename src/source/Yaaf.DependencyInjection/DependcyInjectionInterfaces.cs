@@ -26,27 +26,27 @@ namespace Yaaf.DependencyInjection
 #endif
 	}
 
-	public interface IBinder<TService> {
+	public interface IBinder<TService> where TService : class {
 		void To (Type instanceType);
 		void ToConstant<TInstance> (TInstance serviceInstance) where TInstance : TService;
-		void To<TInstance> () where TInstance : TService;
+		void To<TInstance> () where TInstance : class, TService;
 	}
 
     public interface IKernel {
-		IBinder<TService> Bind<TService> ();
+		IBinder<TService> Bind<TService> () where TService : class;
 		IBinder<object> Bind (Type serviceType);
 
-		void Unbind<TService> ();
+        void Unbind<TService>() where TService : class;
 		void Unbind (Type serviceType);
 
-		IBinder<TService> Rebind<TService> ();
+        IBinder<TService> Rebind<TService>() where TService : class;
 		IBinder<object> Rebind (Type serviceType);
 
-		TService Get<TService> ();
+        TService Get<TService>() where TService : class;
 		object Get (Type serviceType);
 
 
-		FSharpOption<TService> TryGet<TService> ();
+        FSharpOption<TService> TryGet<TService>() where TService : class;
 		FSharpOption<object> TryGet (Type serviceType);
 		IKernel CreateChild ();
     }
