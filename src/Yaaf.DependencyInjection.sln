@@ -68,6 +68,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yaaf.DependencyInjection.Ni
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yaaf.DependencyInjection.SimpleInjector", "source\Yaaf.DependencyInjection.SimpleInjector\Yaaf.DependencyInjection.SimpleInjector.csproj", "{A83A0AD6-539A-475A-8173-53B127A97296}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Test.Yaaf.DependencyInjection", "test\Test.Yaaf.DependencyInjection\Test.Yaaf.DependencyInjection.fsproj", "{590B41F6-7268-434B-B13B-338DA9EBA386}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Test.Yaaf.DependencyInjection.Ninject", "test\Test.Yaaf.DependencyInjection.Ninject\Test.Yaaf.DependencyInjection.Ninject.fsproj", "{7F5D97A2-5777-4B90-9B4D-332D932C240E}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Test.Yaaf.DependencyInjection.SimpleInjector", "test\Test.Yaaf.DependencyInjection.SimpleInjector\Test.Yaaf.DependencyInjection.SimpleInjector.fsproj", "{C668144D-8DD4-4D05-A594-CADF728FC0DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Net40 = Debug|Net40
@@ -114,6 +120,42 @@ Global
 		{A83A0AD6-539A-475A-8173-53B127A97296}.Release|Net45.Build.0 = Release|Net45
 		{A83A0AD6-539A-475A-8173-53B127A97296}.Release|Profile111.ActiveCfg = Release|Profile111
 		{A83A0AD6-539A-475A-8173-53B127A97296}.Release|Profile111.Build.0 = Release|Profile111
+		{590B41F6-7268-434B-B13B-338DA9EBA386}.Debug|Net40.ActiveCfg = Debug|Net40
+		{590B41F6-7268-434B-B13B-338DA9EBA386}.Debug|Net40.Build.0 = Debug|Net40
+		{590B41F6-7268-434B-B13B-338DA9EBA386}.Debug|Net45.ActiveCfg = Debug|Net45
+		{590B41F6-7268-434B-B13B-338DA9EBA386}.Debug|Net45.Build.0 = Debug|Net45
+		{590B41F6-7268-434B-B13B-338DA9EBA386}.Debug|Profile111.ActiveCfg = Debug|Profile111
+		{590B41F6-7268-434B-B13B-338DA9EBA386}.Debug|Profile111.Build.0 = Debug|Profile111
+		{590B41F6-7268-434B-B13B-338DA9EBA386}.Release|Net40.ActiveCfg = Release|Net40
+		{590B41F6-7268-434B-B13B-338DA9EBA386}.Release|Net40.Build.0 = Release|Net40
+		{590B41F6-7268-434B-B13B-338DA9EBA386}.Release|Net45.ActiveCfg = Release|Net45
+		{590B41F6-7268-434B-B13B-338DA9EBA386}.Release|Net45.Build.0 = Release|Net45
+		{590B41F6-7268-434B-B13B-338DA9EBA386}.Release|Profile111.ActiveCfg = Release|Profile111
+		{590B41F6-7268-434B-B13B-338DA9EBA386}.Release|Profile111.Build.0 = Release|Profile111
+		{7F5D97A2-5777-4B90-9B4D-332D932C240E}.Debug|Net40.ActiveCfg = Debug|Net40
+		{7F5D97A2-5777-4B90-9B4D-332D932C240E}.Debug|Net40.Build.0 = Debug|Net40
+		{7F5D97A2-5777-4B90-9B4D-332D932C240E}.Debug|Net45.ActiveCfg = Debug|Net45
+		{7F5D97A2-5777-4B90-9B4D-332D932C240E}.Debug|Net45.Build.0 = Debug|Net45
+		{7F5D97A2-5777-4B90-9B4D-332D932C240E}.Debug|Profile111.ActiveCfg = Debug|Profile111
+		{7F5D97A2-5777-4B90-9B4D-332D932C240E}.Debug|Profile111.Build.0 = Debug|Profile111
+		{7F5D97A2-5777-4B90-9B4D-332D932C240E}.Release|Net40.ActiveCfg = Release|Net40
+		{7F5D97A2-5777-4B90-9B4D-332D932C240E}.Release|Net40.Build.0 = Release|Net40
+		{7F5D97A2-5777-4B90-9B4D-332D932C240E}.Release|Net45.ActiveCfg = Release|Net45
+		{7F5D97A2-5777-4B90-9B4D-332D932C240E}.Release|Net45.Build.0 = Release|Net45
+		{7F5D97A2-5777-4B90-9B4D-332D932C240E}.Release|Profile111.ActiveCfg = Release|Profile111
+		{7F5D97A2-5777-4B90-9B4D-332D932C240E}.Release|Profile111.Build.0 = Release|Profile111
+		{C668144D-8DD4-4D05-A594-CADF728FC0DB}.Debug|Net40.ActiveCfg = Debug|Net40
+		{C668144D-8DD4-4D05-A594-CADF728FC0DB}.Debug|Net40.Build.0 = Debug|Net40
+		{C668144D-8DD4-4D05-A594-CADF728FC0DB}.Debug|Net45.ActiveCfg = Debug|Net45
+		{C668144D-8DD4-4D05-A594-CADF728FC0DB}.Debug|Net45.Build.0 = Debug|Net45
+		{C668144D-8DD4-4D05-A594-CADF728FC0DB}.Debug|Profile111.ActiveCfg = Debug|Profile111
+		{C668144D-8DD4-4D05-A594-CADF728FC0DB}.Debug|Profile111.Build.0 = Debug|Profile111
+		{C668144D-8DD4-4D05-A594-CADF728FC0DB}.Release|Net40.ActiveCfg = Release|Net40
+		{C668144D-8DD4-4D05-A594-CADF728FC0DB}.Release|Net40.Build.0 = Release|Net40
+		{C668144D-8DD4-4D05-A594-CADF728FC0DB}.Release|Net45.ActiveCfg = Release|Net45
+		{C668144D-8DD4-4D05-A594-CADF728FC0DB}.Release|Net45.Build.0 = Release|Net45
+		{C668144D-8DD4-4D05-A594-CADF728FC0DB}.Release|Profile111.ActiveCfg = Release|Profile111
+		{C668144D-8DD4-4D05-A594-CADF728FC0DB}.Release|Profile111.Build.0 = Release|Profile111
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -125,6 +167,9 @@ Global
 		{36F2CC74-84CC-4CCD-B2E4-D510E71057FB} = {240ED267-B8AE-4A38-8FB7-A9376FA28A17}
 		{74E37E7B-B460-4C6E-AF28-76F81ED333DA} = {36F2CC74-84CC-4CCD-B2E4-D510E71057FB}
 		{9A47C8E6-9866-4184-B68F-112E3D3AC1D6} = {4C04B011-7998-4549-A3B5-E57AAF5A2966}
+		{590B41F6-7268-434B-B13B-338DA9EBA386} = {5911949D-C24B-4366-BF88-EC59180A7BFC}
+		{7F5D97A2-5777-4B90-9B4D-332D932C240E} = {5911949D-C24B-4366-BF88-EC59180A7BFC}
+		{C668144D-8DD4-4D05-A594-CADF728FC0DB} = {5911949D-C24B-4366-BF88-EC59180A7BFC}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = IrcDotNet.vsmdi

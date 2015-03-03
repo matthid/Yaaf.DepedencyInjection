@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Yaaf.DependencyInjection
 {
-    public static class NinjectKernelCreator
+    public static class SimpleInjectorKernelCreator
     {
         public static IKernel CreateKernel()
         {
@@ -23,11 +23,23 @@ namespace Yaaf.DependencyInjection
         }
         public static IKernel CreateFromContainer(Container baseKernel)
         {
-            if (baseKernel.GetAllInstances<IKernel>().Any())
+            if (baseKernel.GetRegistration(typeof(IKernel), false) != null)
             {
                 throw new DependencyException("Make sure that the given container doesn't bind to IKernel, because this bind is used internally");
             }
-            return new Yaaf.DependencyInjection.SimpleInjector.SimpleInjectorKernel(baseKernel);
+            return new Yaaf.DependencyInjection.SimpleInjector.SimpleInjectorKernel(Clone(baseKernel));
+        }
+        internal static Container Clone(Container container)
+        {
+            var clone = new Container(SimpleInjector.SimpleInjectorKernel.DefaultSettings);
+            clone.Options.AllowOverridingRegistrations = true;
+            foreach (var reg in container.GetCurrentRegistrations())
+            {
+                clone.Register(reg.ServiceType, reg.Registration.ImplementationType, reg.Lifestyle);
+                //clone.AddRegistration(reg.ServiceType, reg.Registration.);
+            }
+            clone.Options.AllowOverridingRegistrations = false;
+            return clone;
         }
     }
 
@@ -57,6 +69,9 @@ namespace Yaaf.DependencyInjection.SimpleInjector
             throw WrapExn(err);
         }
 
+
+        private object lockObj = new object();
+        private bool isLocked = false;
         private Container kernel;
         internal SimpleInjectorKernel(Container kernel)
         {
@@ -71,6 +86,10 @@ namespace Yaaf.DependencyInjection.SimpleInjector
             }
         }
 
+        internal bool IsLocked { get { return isLocked; } set { isLocked = value; } }
+        internal object LockObj { get { return lockObj; } }
+        internal Container Container { get { return kernel; } set { kernel = value; } }
+        
         private void CheckBind(Type serviceType)
         {
             if (serviceType == typeof(IKernel))
@@ -84,7 +103,7 @@ namespace Yaaf.DependencyInjection.SimpleInjector
             CheckBind(typeof(TService));
             try
             {
-                return new SimpleInjectorBinder<TService>(kernel);
+                return new SimpleInjectorBinder<TService>(this);
             }
             catch (ActivationException err)
             {
@@ -98,7 +117,7 @@ namespace Yaaf.DependencyInjection.SimpleInjector
             CheckBind(serviceType);
             try
             {
-                return new SimpleInjectorBinder<object>(kernel, serviceType);
+                return new SimpleInjectorBinder<object>(this, serviceType);
             }
             catch (ActivationException err)
             {
@@ -138,7 +157,7 @@ namespace Yaaf.DependencyInjection.SimpleInjector
             CheckBind(typeof(TService));
             try
             {
-                return new SimpleInjectorBinder<TService>(kernel);
+                return new SimpleInjectorBinder<TService>(this, allowOverride: true);
             }
             catch (ActivationException err)
             {
@@ -151,7 +170,7 @@ namespace Yaaf.DependencyInjection.SimpleInjector
             CheckBind(serviceType);
             try
             {
-                return new SimpleInjectorBinder<object>(kernel, serviceType);
+                return new SimpleInjectorBinder<object>(this, serviceType, allowOverride: true);
             }
             catch (ActivationException err)
             {
@@ -162,7 +181,11 @@ namespace Yaaf.DependencyInjection.SimpleInjector
         {
             try
             {
-                return kernel.GetInstance<TService>();
+                lock (lockObj)
+                {
+                    isLocked = true;
+                    return kernel.GetInstance<TService>();
+                }
             }
             catch (ActivationException err)
             {
@@ -174,7 +197,11 @@ namespace Yaaf.DependencyInjection.SimpleInjector
         {
             try
             {
-                return kernel.GetInstance(serviceType);
+                lock (lockObj)
+                {
+                    isLocked = true;
+                    return kernel.GetInstance(serviceType);
+                }
             }
             catch (ActivationException err)
             {
@@ -186,12 +213,7 @@ namespace Yaaf.DependencyInjection.SimpleInjector
         {
             try
             {
-                var clone = new Container(DefaultSettings);
-                foreach (var reg in kernel.GetCurrentRegistrations())
-                {
-                    clone.AddRegistration(reg.ServiceType, reg.Registration);
-                }
-                return new SimpleInjectorKernel(clone);
+                return new SimpleInjectorKernel(SimpleInjectorKernelCreator.Clone(kernel));
             }
             catch (ActivationException err)
             {
@@ -203,14 +225,18 @@ namespace Yaaf.DependencyInjection.SimpleInjector
         {
             try
             {
-                var result = kernel.GetAllInstances<TService>();
-                if (result == null || !result.Any())
+                lock (lockObj)
                 {
-                    return FSharpOption<TService>.None;
-                }
-                else
-                {
-                    return FSharpOption<TService>.Some(result.First());
+                    isLocked = true;
+                    var result = kernel.GetRegistration(typeof(TService), false);
+                    if (result == null)
+                    {
+                        return FSharpOption<TService>.None;
+                    }
+                    else
+                    {
+                        return FSharpOption<TService>.Some(kernel.GetInstance<TService>());
+                    }
                 }
             }
             catch (ActivationException err)
@@ -223,14 +249,18 @@ namespace Yaaf.DependencyInjection.SimpleInjector
         {
             try
             {
-                var result = kernel.GetAllInstances(serviceType);
-                if (result == null || !result.Any())
+                lock (lockObj)
                 {
-                    return FSharpOption<object>.None;
-                }
-                else
-                {
-                    return FSharpOption<object>.Some(result.First());
+                    isLocked = true;
+                    var result = kernel.GetRegistration(serviceType, false);
+                    if (result == null)
+                    {
+                        return FSharpOption<object>.None;
+                    }
+                    else
+                    {
+                        return FSharpOption<object>.Some(kernel.GetInstance(serviceType));
+                    }
                 }
             }
             catch (ActivationException err)
