@@ -1,4 +1,8 @@
-﻿### 1.1.0 (SimpleInjector 1.1.1)
+﻿### 1.1.0 (SimpleInjector 1.1.2)
+
+ * SimpleInjector now handles ChildKernel creation properly.
+ 
+### 1.1.0 (SimpleInjector 1.1.1)
 
  * SimpleInjector implementation now supports changing services (workaround container locking)
  * SimpleInjector now supports Rebind is now supported

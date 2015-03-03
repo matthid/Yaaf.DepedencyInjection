@@ -26,3 +26,14 @@ type AbstractDependencyInjectionTestsClass() =
         test <@ tester.Test() = "secound" @>
 
         ()
+        
+    [<Test>]
+    member x.``check that requesting IKernel works`` () =
+        let kernel = x.CreateKernel()
+        let service = kernel.Get<IKernel>()
+        test <@ obj.ReferenceEquals(service, kernel) @>
+
+        let child = kernel.CreateChild();
+        let childService = child.Get<IKernel>()
+        test <@ obj.ReferenceEquals(childService, child) @>
+        ()

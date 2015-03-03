@@ -157,8 +157,8 @@ namespace Yaaf.DependencyInjection.Ninject {
 		public my.IKernel CreateChild ()
 		{
 			try {
-				return new NinjectKernel (
-					new global::Ninject.Extensions.ChildKernel.ChildKernel (kernel, DefaultSettings));
+                var child = new global::Ninject.Extensions.ChildKernel.ChildKernel (kernel, DefaultSettings);
+                return new NinjectKernel (child);
 			} catch (ActivationException err) {
 				throw WrapExn (err);
 			}
