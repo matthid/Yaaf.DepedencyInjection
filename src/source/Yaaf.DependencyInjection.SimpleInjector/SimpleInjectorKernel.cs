@@ -27,7 +27,7 @@ namespace Yaaf.DependencyInjection
             {
                 throw new DependencyException("Make sure that the given container doesn't bind to IKernel, because this bind is used internally");
             }
-            return new Yaaf.DependencyInjection.SimpleInjector.SimpleInjectorKernel(Clone(baseKernel));
+            return new Yaaf.DependencyInjection.SimpleInjector.SimpleInjectorKernel(baseKernel);
         }
         internal static Container Clone(Container container)
         {
@@ -75,14 +75,21 @@ namespace Yaaf.DependencyInjection.SimpleInjector
         private Container kernel;
         internal SimpleInjectorKernel(Container kernel)
         {
+            kernel = SimpleInjectorKernelCreator.Clone(kernel);
             this.kernel = kernel;
+            var before = kernel.Options.AllowOverridingRegistrations;
             try
             {
-                this.kernel.RegisterSingle<IKernel>(this);
+                kernel.Options.AllowOverridingRegistrations = true;
+                kernel.RegisterSingle<IKernel>(this);
             }
             catch (ActivationException err)
             {
                 throw WrapExn(err);
+            }
+            finally
+            {
+                kernel.Options.AllowOverridingRegistrations = before;
             }
         }
 
@@ -213,7 +220,7 @@ namespace Yaaf.DependencyInjection.SimpleInjector
         {
             try
             {
-                return new SimpleInjectorKernel(SimpleInjectorKernelCreator.Clone(kernel));
+                return new SimpleInjectorKernel(Container);
             }
             catch (ActivationException err)
             {
