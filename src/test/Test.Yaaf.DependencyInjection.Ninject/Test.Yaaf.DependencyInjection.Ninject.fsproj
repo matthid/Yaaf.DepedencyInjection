@@ -80,6 +80,34 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="NinjectTests.fs" />
+    <None Include="Script.fsx" />
+    <None Include="paket.references" />
+    <Content Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
+    <ProjectReference Include="..\..\source\Yaaf.DependencyInjection.Ninject\Yaaf.DependencyInjection.Ninject.csproj">
+      <Name>Yaaf.DependencyInjection.Ninject</Name>
+      <Project>{07d79e26-c068-4e44-9712-4707e2f88e2a}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\source\Yaaf.DependencyInjection\Yaaf.DependencyInjection.csproj">
+      <Name>Yaaf.DependencyInjection</Name>
+      <Project>{337804c8-9420-4e2d-a918-a62ac2f84555}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Test.Yaaf.DependencyInjection\Test.Yaaf.DependencyInjection.fsproj">
+      <Name>Test.Yaaf.DependencyInjection</Name>
+      <Project>{590b41f6-7268-434b-b13b-338da9eba386}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0')">
       <ItemGroup>
@@ -185,6 +213,13 @@
       </ItemGroup>
     </When>
   </Choose>
+  <ItemGroup>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\..\packages\NUnit\lib\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+      <Paket>True</Paket>
+    </Reference>
+  </ItemGroup>
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETCore'">
       <ItemGroup>
@@ -279,37 +314,4 @@
       </ItemGroup>
     </When>
   </Choose>
-  <ItemGroup>
-    <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="NinjectTests.fs" />
-    <None Include="Script.fsx" />
-    <None Include="paket.references" />
-    <Content Include="app.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="mscorlib" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Numerics" />
-    <ProjectReference Include="..\..\source\Yaaf.DependencyInjection.Ninject\Yaaf.DependencyInjection.Ninject.csproj">
-      <Name>Yaaf.DependencyInjection.Ninject</Name>
-      <Project>{07d79e26-c068-4e44-9712-4707e2f88e2a}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\source\Yaaf.DependencyInjection\Yaaf.DependencyInjection.csproj">
-      <Name>Yaaf.DependencyInjection</Name>
-      <Project>{337804c8-9420-4e2d-a918-a62ac2f84555}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\Test.Yaaf.DependencyInjection\Test.Yaaf.DependencyInjection.fsproj">
-      <Name>Test.Yaaf.DependencyInjection</Name>
-      <Project>{590b41f6-7268-434b-b13b-338da9eba386}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-    <Reference Include="nunit.framework">
-      <HintPath>..\..\..\packages\NUnit\lib\nunit.framework.dll</HintPath>
-      <Private>True</Private>
-      <Paket>True</Paket>
-    </Reference>
-  </ItemGroup>
 </Project>

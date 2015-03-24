@@ -3,8 +3,6 @@ source https://nuget.org/api/v2
 // Build
 nuget Yaaf.AdvancedBuilding
 nuget NUnit.Runners
-// Until it works on windows.
-nuget FSharp.Formatting == 2.6.3
 
 // Projects
 nuget FSharp.Core
@@ -13,6 +11,6 @@ nuget SimpleInjector
 
 // Tests
 nuget NUnit == 2.6.3
-nuget Foq
+nuget Foq content:none
 nuget FsUnit
 nuget Unquote
