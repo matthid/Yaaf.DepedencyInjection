@@ -52,8 +52,9 @@ let buildConfig =
           { p with
               Version = config.Version
               ReleaseNotes = toLines release.Notes
-              Dependencies = 
-                [ "FSharp.Core", "3.1.2.1" ] })
+              Dependencies =
+                [ "FSharp.Core" ] 
+                |> List.map (fun name -> name, (GetPackageVersion "packages" name)) })
         "Yaaf.DependencyInjection.Ninject.nuspec", (fun config p ->
           { p with
               Version = version_ninject
@@ -62,10 +63,9 @@ let buildConfig =
               Summary = "Yaaf.DependencyInjection.Ninject is a implementation of Yaaf.DependencyInjection for Ninject."
               Description = "Yaaf.DependencyInjection.Ninject is a implementation of Yaaf.DependencyInjection for Ninject."
               Dependencies = 
-                [ "FSharp.Core", "3.1.2.1"
-                  "Portable.Ninject", "3.3.1"
-                  config.ProjectName, config.Version ] })
-
+                [ yield! [ "FSharp.Core"; "Portable.Ninject" ]
+                    |> List.map (fun name -> name, (GetPackageVersion "packages" name))
+                  yield config.ProjectName, config.Version |> RequireExactly ] })
         "Yaaf.DependencyInjection.SimpleInjector.nuspec", (fun config p ->
           { p with
               Version = version_simpleinjector
@@ -74,9 +74,8 @@ let buildConfig =
               Summary = "Yaaf.DependencyInjection.SimpleInjector is a implementation of Yaaf.DependencyInjection for SimpleInjector."
               Description = "Yaaf.DependencyInjection.SimpleInjector is a implementation of Yaaf.DependencyInjection for SimpleInjector."
               Dependencies =
-                [ "FSharp.Core", "3.1.2.1"
-                  "SimpleInjector", "2.7.2"
-                  config.ProjectName, config.Version ] })
+                [ yield! [ "FSharp.Core"; "SimpleInjector" ] |> List.map (fun name -> name, (GetPackageVersion "packages" name))
+                  yield config.ProjectName, config.Version |> RequireExactly ] })
                    ]
     UseNuget = false
     SetAssemblyFileVersions = (fun config ->
