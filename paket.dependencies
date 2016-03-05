@@ -1,4 +1,5 @@
 source https://nuget.org/api/v2
+redirects: on
 
 // Build
 nuget Yaaf.AdvancedBuilding
@@ -10,7 +11,7 @@ nuget Portable.Ninject
 nuget SimpleInjector
 
 // Tests
-nuget NUnit == 2.6.3
+nuget NUnit
 nuget Foq content:none
 nuget FsUnit
 nuget Unquote

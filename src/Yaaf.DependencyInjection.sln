@@ -1,13 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "project_root", "project_root", "{4C04B011-7998-4549-A3B5-E57AAF5A2966}"
 	ProjectSection(SolutionItems) = preProject
 		..\.gitignore = ..\.gitignore
 		..\buildConfig.fsx = ..\buildConfig.fsx
 		..\paket.dependencies = ..\paket.dependencies
+		..\paket.lock = ..\paket.lock
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject

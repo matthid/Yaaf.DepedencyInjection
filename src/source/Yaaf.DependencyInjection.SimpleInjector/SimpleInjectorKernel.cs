@@ -13,7 +13,8 @@ namespace Yaaf.DependencyInjection
         {
             try
             {
-                var kernel = new Container(Yaaf.DependencyInjection.SimpleInjector.SimpleInjectorKernel.DefaultSettings);
+                var kernel = new Container();
+                SimpleInjector.SimpleInjectorKernel.SetDefaultSettings(kernel.Options);
                 return CreateFromContainer(kernel);
             }
             catch (ActivationException err)
@@ -31,7 +32,8 @@ namespace Yaaf.DependencyInjection
         }
         internal static Container Clone(Container container)
         {
-            var clone = new Container(SimpleInjector.SimpleInjectorKernel.DefaultSettings);
+            var clone = new Container();
+            SimpleInjector.SimpleInjectorKernel.SetDefaultSettings(clone.Options);
             clone.Options.AllowOverridingRegistrations = true;
             foreach (var reg in container.GetCurrentRegistrations())
             {
@@ -49,13 +51,8 @@ namespace Yaaf.DependencyInjection.SimpleInjector
 
     internal class SimpleInjectorKernel : IKernel
     {
-        public static ContainerOptions DefaultSettings
+        public static void SetDefaultSettings(ContainerOptions options)
         {
-            get
-            {
-                var settings = new ContainerOptions();
-                return settings;
-            }
         }
 
         internal static DependencyException WrapExn(ActivationException err)
@@ -80,7 +77,7 @@ namespace Yaaf.DependencyInjection.SimpleInjector
             try
             {
                 kernel.Options.AllowOverridingRegistrations = true;
-                kernel.RegisterSingle<IKernel>(this);
+                kernel.RegisterSingleton<IKernel>(this);
             }
             catch (ActivationException err)
             {
