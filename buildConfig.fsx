@@ -54,7 +54,7 @@ let buildConfig =
                     |> List.map (fun name -> name, (GetPackageVersion "packages" name)) } }
         { NuGetPackage.Empty with 
             FileName = "Yaaf.DependencyInjection.Ninject.nuspec"
-            Version = "1.1.1"
+            Version = "1.2.1"
             SimpleName = "ninject"
             TagPrefix = "ninject_"
             ConfigFun = fun p ->

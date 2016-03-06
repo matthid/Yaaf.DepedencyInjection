@@ -1,4 +1,4 @@
-﻿### 1.1.1 (SimpleInjector 1.2.1)
+﻿### 1.2.1 (SimpleInjector 1.2.1)
 
  * Testing release (same as 1.1.0 (SimpleInjector 1.2.0))
 
