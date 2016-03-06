@@ -33,10 +33,6 @@ if isMono then
 let buildConfig =
  // Read release notes document
  let release = ReleaseNotesHelper.parseReleaseNotes (File.ReadLines "doc/ReleaseNotes.md")
- let version_ninject = "1.1.0"
- let project_ninject = "Yaaf.DependencyInjection.Ninject"
- let version_simpleinjector = "1.1.3"
- let project_simpleinjector = "Yaaf.DependencyInjection.SimpleInjector"
  { BuildConfiguration.Defaults with
     ProjectName = "Yaaf.DependencyInjection"
     CopyrightNotice = "Yaaf.DependencyInjection Copyright © Matthias Dittrich 2015"
@@ -47,36 +43,44 @@ let buildConfig =
     PageAuthor = "Matthias Dittrich"
     GithubUser = "matthid"
     Version = release.NugetVersion
-    NugetPackages =
-      [ "Yaaf.DependencyInjection.nuspec", (fun config p ->
-          { p with
-              Version = config.Version
-              ReleaseNotes = toLines release.Notes
-              Dependencies = 
-                [ "FSharp.Core", "3.1.2.1" ] })
-        "Yaaf.DependencyInjection.Ninject.nuspec", (fun config p ->
-          { p with
-              Version = version_ninject
-              ReleaseNotes = toLines release.Notes
-              Project = project_ninject
-              Summary = "Yaaf.DependencyInjection.Ninject is a implementation of Yaaf.DependencyInjection for Ninject."
-              Description = "Yaaf.DependencyInjection.Ninject is a implementation of Yaaf.DependencyInjection for Ninject."
-              Dependencies = 
-                [ "FSharp.Core", "3.1.2.1"
-                  "Portable.Ninject", "3.3.1"
-                  config.ProjectName, config.Version ] })
-
-        "Yaaf.DependencyInjection.SimpleInjector.nuspec", (fun config p ->
-          { p with
-              Version = version_simpleinjector
-              ReleaseNotes = toLines release.Notes
-              Project = project_simpleinjector
-              Summary = "Yaaf.DependencyInjection.SimpleInjector is a implementation of Yaaf.DependencyInjection for SimpleInjector."
-              Description = "Yaaf.DependencyInjection.SimpleInjector is a implementation of Yaaf.DependencyInjection for SimpleInjector."
-              Dependencies =
-                [ "FSharp.Core", "3.1.2.1"
-                  "SimpleInjector", "2.7.2"
-                  config.ProjectName, config.Version ] })
+    NugetVersionPackages = fun config ->
+      [ { NuGetPackage.Empty with
+            FileName = "Yaaf.DependencyInjection.nuspec"
+            ConfigFun = fun p ->
+              { p with
+                  ReleaseNotes = toLines release.Notes
+                  Dependencies =
+                    [ "FSharp.Core" ] 
+                    |> List.map (fun name -> name, (GetPackageVersion "packages" name)) } }
+        { NuGetPackage.Empty with 
+            FileName = "Yaaf.DependencyInjection.Ninject.nuspec"
+            Version = "1.1.0"
+            SimpleName = "ninject"
+            TagPrefix = "ninject_"
+            ConfigFun = fun p ->
+              { p with
+                  ReleaseNotes = toLines release.Notes
+                  Project = "Yaaf.DependencyInjection.Ninject"
+                  Summary = "Yaaf.DependencyInjection.Ninject is a implementation of Yaaf.DependencyInjection for Ninject."
+                  Description = "Yaaf.DependencyInjection.Ninject is a implementation of Yaaf.DependencyInjection for Ninject."
+                  Dependencies = 
+                    [ yield! [ "FSharp.Core"; "Portable.Ninject" ]
+                        |> List.map (fun name -> name, (GetPackageVersion "packages" name))
+                      yield config.ProjectName, config.Version |> RequireExactly ] } }
+        { NuGetPackage.Empty with 
+            FileName = "Yaaf.DependencyInjection.SimpleInjector.nuspec"
+            Version = "1.2.0"
+            SimpleName = "simpleinjector"
+            TagPrefix = "simpleinjector_"
+            ConfigFun = fun p ->
+              { p with
+                  ReleaseNotes = toLines release.Notes
+                  Project = "Yaaf.DependencyInjection.SimpleInjector"
+                  Summary = "Yaaf.DependencyInjection.SimpleInjector is a implementation of Yaaf.DependencyInjection for SimpleInjector."
+                  Description = "Yaaf.DependencyInjection.SimpleInjector is a implementation of Yaaf.DependencyInjection for SimpleInjector."
+                  Dependencies =
+                    [ yield! [ "FSharp.Core"; "SimpleInjector" ] |> List.map (fun name -> name, (GetPackageVersion "packages" name))
+                      yield config.ProjectName, config.Version |> RequireExactly ] } }
                    ]
     UseNuget = false
     SetAssemblyFileVersions = (fun config ->
@@ -88,23 +92,28 @@ let buildConfig =
           Attribute.FileVersion config.Version
           Attribute.InformationalVersion config.Version ]
       CreateCSharpAssemblyInfo "./src/SharedAssemblyInfo.cs" info
+      let ninject = config.GetPackageByName "ninject"
+      let ninjectSpec = ninject.ConfigFun (NuGetDefaults())
       let info =
-        [ Attribute.Company project_ninject
-          Attribute.Product project_ninject
+        [ Attribute.Company ninjectSpec.Project
+          Attribute.Product ninjectSpec.Project
           Attribute.Copyright config.CopyrightNotice
-          Attribute.Version version_ninject
-          Attribute.FileVersion version_ninject
-          Attribute.InformationalVersion version_ninject ]
+          Attribute.Version ninject.Version
+          Attribute.FileVersion ninject.Version
+          Attribute.InformationalVersion ninject.Version ]
       CreateCSharpAssemblyInfo "./src/SharedAssemblyInfo.Ninject.cs" info
+      let simpleInjector = config.GetPackageByName "simpleinjector"
+      let simpleInjectorSpec = ninject.ConfigFun (NuGetDefaults())
       let info =
-        [ Attribute.Company project_simpleinjector
-          Attribute.Product project_simpleinjector
+        [ Attribute.Company simpleInjectorSpec.Project
+          Attribute.Product simpleInjectorSpec.Project
           Attribute.Copyright config.CopyrightNotice
-          Attribute.Version version_simpleinjector
-          Attribute.FileVersion version_simpleinjector
-          Attribute.InformationalVersion version_simpleinjector ]
+          Attribute.Version simpleInjector.Version
+          Attribute.FileVersion simpleInjector.Version
+          Attribute.InformationalVersion simpleInjector.Version ]
       CreateCSharpAssemblyInfo "./src/SharedAssemblyInfo.SimpleInjector.cs" info )
-    EnableProjectFileCreation = false
+    RestrictReleaseToWindows = false
+    DisableNUnit = true
     GeneratedFileList =
       [ "Yaaf.DependencyInjection.dll"
         "Yaaf.DependencyInjection.xml"
@@ -116,19 +125,13 @@ let buildConfig =
      [ { BuildParams.WithSolution with
           // The default build
           PlatformName = "Net40"
-          // Workaround FSharp.Compiler.Service not liking to have a FSharp.Core here: https://github.com/fsprojects/FSharpx.Reflection/issues/1
-          AfterBuild = fun _ -> File.Delete "build/net40/FSharp.Core.dll"
           SimpleBuildName = "net40" }
        { BuildParams.WithSolution with
           // The default build
           PlatformName = "Profile111"
-          // Workaround FSharp.Compiler.Service not liking to have a FSharp.Core here: https://github.com/fsprojects/FSharpx.Reflection/issues/1
-          AfterBuild = fun _ -> File.Delete "build/profile111/FSharp.Core.dll"
           SimpleBuildName = "profile111" }
        { BuildParams.WithSolution with
           // The default build
           PlatformName = "Net45"
-          // Workaround FSharp.Compiler.Service not liking to have a FSharp.Core here: https://github.com/fsprojects/FSharpx.Reflection/issues/1
-          AfterBuild = fun _ -> File.Delete "build/net45/FSharp.Core.dll"
           SimpleBuildName = "net45" } ]
   }

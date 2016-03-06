@@ -73,11 +73,11 @@ namespace Yaaf.DependencyInjection.SimpleInjector
             {
                 if (serviceType == null)
                 {
-                    Container.RegisterSingle<TService>(serviceInstance);
+                    Container.RegisterSingleton<TService>(serviceInstance);
                 }
                 else
                 {
-                    Container.RegisterSingle(serviceType, serviceInstance);
+                    Container.RegisterSingleton(serviceType, serviceInstance);
                 }
             });
         }

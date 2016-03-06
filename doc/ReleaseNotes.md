@@ -1,4 +1,8 @@
-﻿### 1.1.0 (SimpleInjector 1.1.3)
+﻿### 1.1.0 (SimpleInjector 1.2.0)
+
+ * Update to SimpleInjector version 3
+
+### 1.1.0 (SimpleInjector 1.1.3)
 
  * SimpleInjector: fixed another bug with ChildKernels.
 

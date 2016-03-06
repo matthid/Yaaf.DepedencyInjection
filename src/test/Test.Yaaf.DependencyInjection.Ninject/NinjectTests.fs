@@ -8,5 +8,4 @@ open NUnit.Framework
 type NinjectTests() = 
     inherit AbstractDependencyInjectionTestsClass()
     override x.CreateKernel() =
-        NinjectKernelCreator.CreateKernel() 
-
+        NinjectKernelCreator.CreateKernel()
