@@ -10,6 +10,12 @@ type Tester (data) =
     interface ITest with
         member x.Test () = data 
 
+[<TestFixture>]
+type NinjectTests() = 
+    [<Test>]
+    member x.``dummy to make nunit3 happy`` () =
+        ()
+
 [<AbstractClass>]
 type AbstractDependencyInjectionTestsClass() = 
     
